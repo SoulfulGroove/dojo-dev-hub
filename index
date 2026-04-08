@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dojo DevHub</title>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			:root {
+				--bg: #121512;
+				--panel: #1c221b;
+				--gold: #d1a451;
+				--text: #e8e4d8;
+				--muted: #a9a394;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				font-family: Inter, sans-serif;
+				background: radial-gradient(
+						circle at top,
+						rgba(209, 164, 81, 0.1),
+						transparent 30%
+					),
+					var(--bg);
+				color: var(--text);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+
+			.container {
+				text-align: center;
+				max-width: 800px;
+			}
+
+			h1 {
+				font-family: Cinzel, serif;
+				font-size: 2.8rem;
+				margin-bottom: 10px;
+			}
+
+			.subtitle {
+				color: var(--muted);
+				margin-bottom: 40px;
+			}
+
+			.panel {
+				background: linear-gradient(180deg, #232a21, #1a2019);
+				border: 1px solid rgba(209, 164, 81, 0.3);
+				border-radius: 16px;
+				padding: 20px;
+				margin: 10px auto;
+				width: 280px;
+				text-decoration: none;
+				color: var(--text);
+				display: block;
+				transition: all 0.2s ease;
+			}
+
+			.panel:hover {
+				transform: scale(1.05);
+				border-color: var(--gold);
+				box-shadow: 0 0 15px rgba(209, 164, 81, 0.3);
+			}
+
+			.panel-title {
+				font-family: Cinzel, serif;
+				font-size: 1.4rem;
+				margin-bottom: 6px;
+			}
+
+			.panel-desc {
+				font-size: 0.9rem;
+				color: var(--muted);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Dojo DevHub</h1>
+			<div class="subtitle">Internal Workshop • Overworld Access</div>
+
+			<a href="/construction.html" class="panel">
+				<div class="panel-title">🛠️ Construction</div>
+				<div class="panel-desc">Build the DevHub system</div>
+			</a>
+
+			<!-- Future panels -->
+			<!--
+  <a href="/modules.html" class="panel">
+    <div class="panel-title">⚙️ Modules</div>
+    <div class="panel-desc">Access dojo systems</div>
+  </a>
+
+  <a href="/components.html" class="panel">
+    <div class="panel-title">🧱 Components</div>
+    <div class="panel-desc">UI building blocks</div>
+  </a>
+  -->
+		</div>
+	</body>
+</html>
