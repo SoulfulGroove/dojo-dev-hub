@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dojo DevHub Quest Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#131712;
+    --bg2:#1b2119;
+    --panel:#20271e;
+    --panel-2:#273025;
+    --line:#46523f;
+    --gold:#d1a451;
+    --gold-dim:#8a6a30;
+    --moss:#748464;
+    --paper:#efe2bf;
+    --text:#e9e4d7;
+    --muted:#b7b19f;
+    --ember:#ffb14d;
+    --red:#c76758;
+    --green:#6fb37f;
+    --cyan:#6fb4bc;
+    --shadow: 0 16px 40px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:
+    radial-gradient(circle at top, rgba(209,164,81,.12), transparent 28%),
+    linear-gradient(180deg, #161b15 0%, #111411 100%);
+    color:var(--text); font-family:Inter,system-ui,sans-serif;
+  }
+
+  .wrap{max-width:1300px;margin:0 auto;padding:28px 20px 64px;}
+  .hero{
+    position:relative; overflow:hidden;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+      linear-gradient(135deg, rgba(209,164,81,.08), transparent 40%),
+      linear-gradient(180deg, #1c221a, #171b16);
+    border:1px solid rgba(209,164,81,.25);
+    border-radius:28px;
+    padding:28px 28px 22px;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+  }
+
+  .hero:before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 56px,
+        rgba(255,255,255,.02) 56px 57px
+      );
+    opacity:.35; pointer-events:none;
+  }
+
+  .eyebrow{
+    color:var(--gold); font-size:.8rem; letter-spacing:.18em; text-transform:uppercase;
+    margin-bottom:8px; font-weight:700;
+  }
+  h1,h2,h3{font-family:Cinzel,serif; margin:0 0 10px}
+  h1{font-size:clamp(2rem,4vw,3.3rem); line-height:1.05}
+  .hero p{max-width:900px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+  .hero-grid{
+    display:grid; grid-template-columns:1.7fr 1fr; gap:18px; margin-top:22px;
+  }
+
+  .summary-card,.focus-card{
+    background:rgba(15,18,14,.45);
+    border:1px solid rgba(209,164,81,.2);
+    border-radius:20px;
+    padding:18px;
+    backdrop-filter: blur(6px);
+  }
+
+  .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+  .chip{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    padding:8px 12px;border-radius:999px;font-size:.92rem;color:var(--paper)
+  }
+
+  .topnav{
+    display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px;
+  }
+  .navbtn{
+    border:1px solid rgba(209,164,81,.25);
+    background:linear-gradient(180deg, #242b21, #1b2119);
+    color:var(--paper); padding:10px 14px; border-radius:999px; text-decoration:none;
+    font-weight:600; font-size:.95rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .navbtn:hover{border-color:rgba(209,164,81,.55); transform:translateY(-1px)}
+
+  .layout{
+    display:grid; grid-template-columns:320px 1fr; gap:20px;
+  }
+
+  .sidebar, .main-card{
+    background:linear-gradient(180deg, #1a2018, #151915);
+    border:1px solid rgba(209,164,81,.16);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+  }
+
+  .sidebar{padding:18px; position:sticky; top:18px; height:max-content}
+  .main{display:grid; gap:20px}
+
+  .section{
+    background:linear-gradient(180deg, #1c221a, #151915);
+    border:1px solid rgba(209,164,81,.16);
+    border-radius:24px;
+    padding:20px;
+    box-shadow:var(--shadow);
+  }
+
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.08); padding-bottom:12px;
+  }
+
+  .muted{color:var(--muted)}
+  .small{font-size:.92rem}
+  .tag{
+    font-size:.78rem; text-transform:uppercase; letter-spacing:.12em;
+    border-radius:999px; padding:8px 10px; border:1px solid rgba(255,255,255,.12)
+  }
+  .tag.green{color:#dff5e5; background:rgba(111,179,127,.15)}
+  .tag.gold{color:#f3dfb2; background:rgba(209,164,81,.12)}
+  .tag.red{color:#ffd6d0; background:rgba(199,103,88,.14)}
+  .tag.cyan{color:#d7f6f9; background:rgba(111,180,188,.14)}
+
+  .stat-grid, .phase-grid, .kit-grid, .two-col{
+    display:grid; gap:14px;
+  }
+  .stat-grid{grid-template-columns:repeat(4,1fr)}
+  .phase-grid{grid-template-columns:repeat(2,1fr)}
+  .kit-grid{grid-template-columns:repeat(3,1fr)}
+  .two-col{grid-template-columns:1fr 1fr}
+
+  .stat, .tile, .kit, .note{
+    background:linear-gradient(180deg, #242c22, #1c231b);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px; padding:16px;
+  }
+
+  .stat .label{font-size:.85rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+  .stat .value{font-size:1.45rem; font-weight:700; margin-top:6px; color:var(--paper)}
+
+  .tile h3,.kit h3{font-size:1.08rem; margin-bottom:8px}
+  .tile ul,.kit ul,.checklist ul,.stoplist ul,.quest ul{margin:10px 0 0 18px; padding:0}
+  li{margin:7px 0; line-height:1.45}
+  .badge{
+    display:inline-block; font-size:.78rem; margin-left:8px; padding:4px 8px; border-radius:999px;
+    background:rgba(209,164,81,.12); border:1px solid rgba(209,164,81,.22); color:#f0d7a1;
+  }
+
+  details{
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px; padding:14px 16px; background:rgba(255,255,255,.02)
+  }
+  details + details{margin-top:12px}
+  summary{
+    cursor:pointer; list-style:none; font-weight:700; color:var(--paper);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary:after{
+    content:"+";
+    color:var(--gold); font-size:1.2rem; font-weight:700;
+  }
+  details[open] summary:after{content:"–"}
+
+  .path{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    margin-top:12px;
+  }
+  .path span{
+    padding:9px 12px; border-radius:12px; background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08)
+  }
+  .arrow{color:var(--gold)}
+
+  .checklist, .stoplist, .quest{
+    border-radius:18px; padding:16px;
+  }
+  .checklist{background:rgba(111,179,127,.08); border:1px solid rgba(111,179,127,.22)}
+  .stoplist{background:rgba(199,103,88,.08); border:1px solid rgba(199,103,88,.22)}
+  .quest{background:rgba(111,180,188,.08); border:1px solid rgba(111,180,188,.22)}
+
+  .mono{
+    background:#10140f; color:#e9e4d7; border:1px solid rgba(255,255,255,.08); border-radius:16px;
+    padding:14px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.92rem; white-space:pre-wrap
+  }
+
+  .footer-note{
+    text-align:center; color:var(--muted); margin-top:26px; font-size:.92rem
+  }
+
+  @media (max-width: 1040px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:relative; top:auto}
+    .hero-grid,.phase-grid,.kit-grid,.two-col,.stat-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="eyebrow">Dojo Build Quest</div>
+      <h1>DevHub Construction Module</h1>
+      <p>
+        A meta-dojo page for building the Dojo DevHub itself. This module turns the setup process into a playable quest:
+        define the stack, build the first screen, establish the panel language, and deploy the first usable control room.
+      </p>
+
+      <div class="hero-grid">
+        <div class="summary-card">
+          <h3>Core Objective</h3>
+          <p class="muted">
+            Build a custom HTML DevHub that feels like a real game screen, serves as your internal overworld map,
+            and gives fast access to modules, components, experiments, and practical build steps.
+          </p>
+          <div class="chips">
+            <span class="chip">Carrd = Public Hub</span>
+            <span class="chip">DevHub = Internal Overworld</span>
+            <span class="chip">GitHub = Code Home</span>
+            <span class="chip">Cloudflare Pages = Hosting</span>
+            <span class="chip">JSON = First Data Source</span>
+          </div>
+        </div>
+
+        <div class="focus-card">
+          <h3>Current Focus</h3>
+          <ul>
+            <li>Start with one repo and one deployable screen</li>
+            <li>Use one strong panel component</li>
+            <li>Make the illusion of a game UI with simple web tech</li>
+            <li>Delay backend complexity until needed</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <nav class="topnav">
+      <a class="navbtn" href="#orientation">Orientation</a>
+      <a class="navbtn" href="#stack">Stack</a>
+      <a class="navbtn" href="#phases">Phases</a>
+      <a class="navbtn" href="#steps">Steps</a>
+      <a class="navbtn" href="#assets">Assets</a>
+      <a class="navbtn" href="#checklists">Checklists</a>
+      <a class="navbtn" href="#structure">Repo Structure</a>
+      <a class="navbtn" href="#milestones">Milestones</a>
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Quick Map</h2>
+        <div class="stat-grid" style="grid-template-columns:1fr; margin-top:10px;">
+          <div class="stat">
+            <div class="label">Primary Build</div>
+            <div class="value">DevHub Screen</div>
+          </div>
+          <div class="stat">
+            <div class="label">First Victory</div>
+            <div class="value">4 Live Panels</div>
+          </div>
+          <div class="stat">
+            <div class="label">First Deploy</div>
+            <div class="value">dev subdomain</div>
+          </div>
+          <div class="stat">
+            <div class="label">Data Path</div>
+            <div class="value">JSON → fetch</div>
+          </div>
+        </div>
+
+        <div class="quest" style="margin-top:16px;">
+          <h3>Quest Rule</h3>
+          <ul>
+            <li>Build one believable screen first</li>
+            <li>Do not solve the whole dojo at once</li>
+            <li>Use placeholders before polished assets</li>
+            <li>Reuse one panel shell repeatedly</li>
+          </ul>
+        </div>
+
+        <div class="stoplist" style="margin-top:16px;">
+          <h3>Do Not Do Yet</h3>
+          <ul>
+            <li>Do not overbuild the backend</li>
+            <li>Do not wait for perfect assets</li>
+            <li>Do not design every page first</li>
+            <li>Do not merge repos early</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="section" id="orientation">
+          <div class="section-head">
+            <div>
+              <h2>Orientation</h2>
+              <p class="muted small">What this module is doing and why the structure works.</p>
+            </div>
+            <span class="tag gold">Framework</span>
+          </div>
+
+          <div class="two-col">
+            <div class="tile">
+              <h3>LEGO Model</h3>
+              <ul>
+                <li><strong>Modules</strong> = LEGO kits</li>
+                <li><strong>Components</strong> = LEGO bricks</li>
+                <li><strong>DevHub</strong> = overworld map / control panel</li>
+                <li><strong>Carrd</strong> = front door / public navigation</li>
+              </ul>
+            </div>
+            <div class="tile">
+              <h3>Construction Principle</h3>
+              <p class="muted">
+                Build the small statue first. One believable screen, one reusable panel, one clean deploy.
+                Then expand, refine, and unify the world.
+              </p>
+            </div>
+          </div>
+
+          <div class="path">
+            <span>Carrd</span><span class="arrow">→</span>
+            <span>DevHub</span><span class="arrow">→</span>
+            <span>Modules</span><span class="arrow">→</span>
+            <span>Components</span><span class="arrow">→</span>
+            <span>Data-driven screens</span>
+          </div>
+        </section>
+
+        <section class="section" id="stack">
+          <div class="section-head">
+            <div>
+              <h2>Minimum Stack</h2>
+              <p class="muted small">What you need right now and what can wait.</p>
+            </div>
+            <span class="tag green">Minimum Requirements</span>
+          </div>
+
+          <div class="kit-grid">
+            <div class="kit">
+              <h3>GitHub <span class="badge">Required</span></h3>
+              <ul>
+                <li>Store HTML, CSS, JS</li>
+                <li>Store JSON data files</li>
+                <li>Keep module repos separate</li>
+              </ul>
+            </div>
+            <div class="kit">
+              <h3>Cloudflare Pages <span class="badge">Required</span></h3>
+              <ul>
+                <li>Host the DevHub</li>
+                <li>Deploy module repos</li>
+                <li>Add Functions later only if needed</li>
+              </ul>
+            </div>
+            <div class="kit">
+              <h3>Carrd <span class="badge">Required</span></h3>
+              <ul>
+                <li>Public hub</li>
+                <li>Simple navigation</li>
+                <li>Subtle footer link to DevHub if desired</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="two-col" style="margin-top:14px;">
+            <div class="note">
+              <h3>Use Now</h3>
+              <ul>
+                <li>1 repo</li>
+                <li>1 page</li>
+                <li>1 panel design</li>
+                <li>4 links</li>
+                <li>Optional placeholder icons</li>
+              </ul>
+            </div>
+            <div class="note">
+              <h3>Use Later</h3>
+              <ul>
+                <li>Cloudflare KV / D1</li>
+                <li>Advanced persistence</li>
+                <li>Shared component system across repos</li>
+                <li>More complex map interactions</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="phases">
+          <div class="section-head">
+            <div>
+              <h2>Build Phases</h2>
+              <p class="muted small">The whole journey compressed into manageable layers.</p>
+            </div>
+            <span class="tag cyan">Roadmap</span>
+          </div>
+
+          <div class="phase-grid">
+            <div class="tile">
+              <h3>Phase 1 — Functional Skeleton</h3>
+              <ul>
+                <li>Create the repo</li>
+                <li>Make a full-screen index page</li>
+                <li>Add 4 panels</li>
+                <li>Make the links work</li>
+              </ul>
+            </div>
+            <div class="tile">
+              <h3>Phase 2 — Cohesive UI</h3>
+              <ul>
+                <li>Set fonts, spacing, borders, glow</li>
+                <li>Create one strong panel shell</li>
+                <li>Make it feel like one world</li>
+              </ul>
+            </div>
+            <div class="tile">
+              <h3>Phase 3 — Atmosphere</h3>
+              <ul>
+                <li>Add textures and background art</li>
+                <li>Add icons and room flavor</li>
+                <li>Improve hover / focus states</li>
+              </ul>
+            </div>
+            <div class="tile">
+              <h3>Phase 4 — Expansion</h3>
+              <ul>
+                <li>Add modules page</li>
+                <li>Add components page</li>
+                <li>Add JSON-driven content if useful</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="steps">
+          <div class="section-head">
+            <div>
+              <h2>Step-by-Step Actions</h2>
+              <p class="muted small">This is the practical execution layer.</p>
+            </div>
+            <span class="tag gold">Action Plan</span>
+          </div>
+
+          <details open>
+            <summary>Step 1 — Create the DevHub repo</summary>
+            <ul>
+              <li>Name idea: <strong>dojo-devhub</strong></li>
+              <li>Add: <code>index.html</code>, <code>style.css</code>, <code>script.js</code> (optional), and <code>assets/</code></li>
+              <li>Keep it lightweight</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Step 2 — Build the first screen</summary>
+            <ul>
+              <li>Make one full-screen custom HTML page</li>
+              <li>Add 4 panels: Forge, Kanji, Components, Dashboard</li>
+              <li>Each panel gets: title, subtitle, icon, link</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Step 3 — Create one panel shell</summary>
+            <ul>
+              <li>Decide the panel frame style</li>
+              <li>Use that same shell repeatedly</li>
+              <li>Vary color and icon, not structure</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Step 4 — Style it to feel like a game</summary>
+            <ul>
+              <li>Dark background</li>
+              <li>Contrast with gold / ember highlights</li>
+              <li>Border + shadow + hover glow</li>
+              <li>Consistent title font and body font</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Step 5 — Deploy it</summary>
+            <ul>
+              <li>Connect repo to Cloudflare Pages</li>
+              <li>Point subdomain like <strong>dev.theadhddojo.com</strong></li>
+              <li>Use that page as your internal workshop screen</li>
+            </ul>
+          </details>
+        </section>
+
+        <section class="section" id="assets">
+          <div class="section-head">
+            <div>
+              <h2>Asset Requirements</h2>
+              <p class="muted small">Only the essentials. Start with placeholders first.</p>
+            </div>
+            <span class="tag red">Art Direction</span>
+          </div>
+
+          <div class="kit-grid">
+            <div class="kit">
+              <h3>Need First</h3>
+              <ul>
+                <li>1 background</li>
+                <li>1 panel style</li>
+                <li>4 simple icons or emojis</li>
+                <li>1 title font</li>
+                <li>1 body font</li>
+              </ul>
+            </div>
+            <div class="kit">
+              <h3>Helpful Next</h3>
+              <ul>
+                <li>Paper / metal / stone textures</li>
+                <li>Panel corner ornaments</li>
+                <li>Module-specific icons</li>
+                <li>Glow / light overlays</li>
+              </ul>
+            </div>
+            <div class="kit">
+              <h3>Final Polish</h3>
+              <ul>
+                <li>Room-specific art</li>
+                <li>Decorative dividers</li>
+                <li>Unique panel states</li>
+                <li>A fully cohesive visual language</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mono" style="margin-top:14px;">Starter idea:
+assets/
+  background-devhub.jpg
+  icon-forge.png
+  icon-kanji.png
+  icon-dashboard.png
+  icon-components.png</div>
+        </section>
+
+        <section class="section" id="checklists">
+          <div class="section-head">
+            <div>
+              <h2>Checklist / Stop List / Win Conditions</h2>
+              <p class="muted small">Use this like a build ritual.</p>
+            </div>
+            <span class="tag green">Execution</span>
+          </div>
+
+          <div class="two-col">
+            <div class="checklist">
+              <h3>Minimum Build Checklist</h3>
+              <ul>
+                <li>Repo created</li>
+                <li>Index page created</li>
+                <li>4 panels on screen</li>
+                <li>Links working</li>
+                <li>Dark themed UI applied</li>
+                <li>Hover state added</li>
+                <li>Cloudflare deployed</li>
+              </ul>
+            </div>
+
+            <div class="stoplist">
+              <h3>Stop List</h3>
+              <ul>
+                <li>Stop gathering endless assets first</li>
+                <li>Stop trying to design every room at once</li>
+                <li>Stop waiting for perfect art</li>
+                <li>Stop adding backend before the first screen works</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="quest" style="margin-top:14px;">
+            <h3>First Victory Condition</h3>
+            <ul>
+              <li>The DevHub feels like selecting destinations, not clicking plain links</li>
+              <li>It is live on its own subdomain</li>
+              <li>You can use it to access your real module work</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="structure">
+          <div class="section-head">
+            <div>
+              <h2>Repo Structures</h2>
+              <p class="muted small">Clean starting skeletons.</p>
+            </div>
+            <span class="tag cyan">Architecture</span>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <h3>DevHub Repo</h3>
+              <div class="mono">dojo-devhub/
+  index.html
+  style.css
+  script.js
+  modules.html      # optional later
+  components.html   # optional later
+  assets/
+    background-devhub.jpg
+    icons/</div>
+            </div>
+            <div>
+              <h3>Kanji Module Repo</h3>
+              <div class="mono">dojo-kanji/
+  index.html
+  style.css
+  script.js
+  data/
+    kanji.json
+    passages.json
+  components/
+    card.js
+    worksheet.js
+  assets/
+    icons/
+    textures/</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="milestones">
+          <div class="section-head">
+            <div>
+              <h2>Milestones</h2>
+              <p class="muted small">Use these as progression markers.</p>
+            </div>
+            <span class="tag gold">Progression</span>
+          </div>
+
+          <div class="phase-grid">
+            <div class="tile">
+              <h3>Milestone 1 — Screen Exists</h3>
+              <p class="muted">A raw but functional DevHub page is on screen locally.</p>
+            </div>
+            <div class="tile">
+              <h3>Milestone 2 — Screen Feels Good</h3>
+              <p class="muted">Panels, spacing, colors, and hover states create a game-like feel.</p>
+            </div>
+            <div class="tile">
+              <h3>Milestone 3 — Screen Is Live</h3>
+              <p class="muted">The DevHub is deployed and reachable from its subdomain.</p>
+            </div>
+            <div class="tile">
+              <h3>Milestone 4 — Screen Becomes Useful</h3>
+              <p class="muted">You use it to launch real modules and build with less friction.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer-note">
+          DevHub Construction Module • Build one believable screen first.
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
