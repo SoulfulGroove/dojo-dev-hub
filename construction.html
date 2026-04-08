@@ -29,10 +29,13 @@
   }
 
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:
-    radial-gradient(circle at top, rgba(209,164,81,.12), transparent 28%),
-    linear-gradient(180deg, #161b15 0%, #111411 100%);
-    color:var(--text); font-family:Inter,system-ui,sans-serif;
+  html,body{
+    margin:0;padding:0;
+    background:
+      radial-gradient(circle at top, rgba(209,164,81,.12), transparent 28%),
+      linear-gradient(180deg, #161b15 0%, #111411 100%);
+    color:var(--text);
+    font-family:Inter,system-ui,sans-serif;
   }
 
   .wrap{max-width:1300px;margin:0 auto;padding:28px 20px 64px;}
@@ -200,6 +203,89 @@
     padding:14px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.92rem; white-space:pre-wrap
   }
 
+  .progress-shell{
+    display:grid; gap:14px;
+  }
+  .meter{
+    width:100%; height:16px; background:#10140f; border-radius:999px;
+    border:1px solid rgba(255,255,255,.1); overflow:hidden;
+  }
+  .meter-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--gold), var(--ember));
+    box-shadow:0 0 20px rgba(255,177,77,.35);
+    transition:width .25s ease;
+  }
+  .progress-meta{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+  }
+  .progress-box{
+    background:linear-gradient(180deg, #242c22, #1c231b);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px; padding:14px;
+  }
+  .progress-box .label{
+    font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  }
+  .progress-box .value{
+    font-size:1.35rem; font-weight:700; color:var(--paper); margin-top:6px;
+  }
+
+  .task-list{
+    display:grid; gap:10px; margin-top:10px;
+  }
+  .task-item{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 14px;
+    background:linear-gradient(180deg, #242c22, #1c231b);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+  }
+  .task-item:hover{
+    border-color:rgba(209,164,81,.28);
+  }
+  .task-item input[type="checkbox"]{
+    margin-top:3px;
+    width:18px; height:18px; accent-color: var(--gold);
+    flex:0 0 auto;
+  }
+  .task-text{
+    line-height:1.45;
+  }
+  .task-item.done{
+    opacity:.72;
+  }
+  .task-item.done .task-text{
+    text-decoration:line-through;
+    color:var(--muted);
+  }
+
+  .current-objective{
+    border:1px solid rgba(209,164,81,.24);
+    background:linear-gradient(180deg, rgba(209,164,81,.09), rgba(255,255,255,.02));
+    border-radius:18px; padding:16px;
+  }
+  .current-objective strong{
+    color:var(--paper);
+  }
+
+  .button-row{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;
+  }
+  .action-btn{
+    border:1px solid rgba(209,164,81,.25);
+    background:linear-gradient(180deg, #242b21, #1b2119);
+    color:var(--paper);
+    padding:10px 14px;
+    border-radius:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .action-btn:hover{
+    border-color:rgba(209,164,81,.55);
+    transform:translateY(-1px);
+  }
+
   .footer-note{
     text-align:center; color:var(--muted); margin-top:26px; font-size:.92rem
   }
@@ -207,7 +293,7 @@
   @media (max-width: 1040px){
     .layout{grid-template-columns:1fr}
     .sidebar{position:relative; top:auto}
-    .hero-grid,.phase-grid,.kit-grid,.two-col,.stat-grid{grid-template-columns:1fr}
+    .hero-grid,.phase-grid,.kit-grid,.two-col,.stat-grid,.progress-meta{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -250,6 +336,7 @@
     </section>
 
     <nav class="topnav">
+      <a class="navbtn" href="#progress">Progress</a>
       <a class="navbtn" href="#orientation">Orientation</a>
       <a class="navbtn" href="#stack">Stack</a>
       <a class="navbtn" href="#phases">Phases</a>
@@ -304,6 +391,48 @@
       </aside>
 
       <main class="main">
+        <section class="section" id="progress">
+          <div class="section-head">
+            <div>
+              <h2>Quest Progress</h2>
+              <p class="muted small">Check off the build tasks and watch the module update your progress.</p>
+            </div>
+            <span class="tag green">Interactive</span>
+          </div>
+
+          <div class="progress-shell">
+            <div class="current-objective">
+              <div class="small muted">Current Objective</div>
+              <div id="currentObjective"><strong>Start the quest by completing the first unchecked task.</strong></div>
+            </div>
+
+            <div class="meter">
+              <div class="meter-fill" id="meterFill"></div>
+            </div>
+
+            <div class="progress-meta">
+              <div class="progress-box">
+                <div class="label">Completion</div>
+                <div class="value" id="completionPct">0%</div>
+              </div>
+              <div class="progress-box">
+                <div class="label">Tasks Done</div>
+                <div class="value"><span id="tasksDone">0</span>/<span id="tasksTotal">0</span></div>
+              </div>
+              <div class="progress-box">
+                <div class="label">XP Earned</div>
+                <div class="value" id="xpEarned">0 XP</div>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button class="action-btn" id="expandAllBtn" type="button">Expand All</button>
+              <button class="action-btn" id="collapseAllBtn" type="button">Collapse All</button>
+              <button class="action-btn" id="resetBtn" type="button">Reset Progress</button>
+            </div>
+          </div>
+        </section>
+
         <section class="section" id="orientation">
           <div class="section-head">
             <div>
@@ -457,48 +586,48 @@
 
           <details open>
             <summary>Step 1 — Create the DevHub repo</summary>
-            <ul>
-              <li>Name idea: <strong>dojo-devhub</strong></li>
-              <li>Add: <code>index.html</code>, <code>style.css</code>, <code>script.js</code> (optional), and <code>assets/</code></li>
-              <li>Keep it lightweight</li>
-            </ul>
+            <div class="task-list">
+              <label class="task-item"><input type="checkbox" data-task="repo-name"><span class="task-text">Choose a repo name such as <strong>dojo-devhub</strong>.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="repo-files"><span class="task-text">Add <code>index.html</code>, <code>style.css</code>, <code>script.js</code> (optional), and an <code>assets/</code> folder.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="repo-light"><span class="task-text">Keep the repo lightweight and focused on the DevHub screen.</span></label>
+            </div>
           </details>
 
           <details>
             <summary>Step 2 — Build the first screen</summary>
-            <ul>
-              <li>Make one full-screen custom HTML page</li>
-              <li>Add 4 panels: Forge, Kanji, Components, Dashboard</li>
-              <li>Each panel gets: title, subtitle, icon, link</li>
-            </ul>
+            <div class="task-list">
+              <label class="task-item"><input type="checkbox" data-task="screen-full"><span class="task-text">Make one full-screen custom HTML page.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="screen-panels"><span class="task-text">Add 4 panels: Forge, Kanji, Components, Dashboard.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="screen-parts"><span class="task-text">Give each panel a title, subtitle, icon, and link.</span></label>
+            </div>
           </details>
 
           <details>
             <summary>Step 3 — Create one panel shell</summary>
-            <ul>
-              <li>Decide the panel frame style</li>
-              <li>Use that same shell repeatedly</li>
-              <li>Vary color and icon, not structure</li>
-            </ul>
+            <div class="task-list">
+              <label class="task-item"><input type="checkbox" data-task="panel-style"><span class="task-text">Decide the panel frame style.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="panel-repeat"><span class="task-text">Reuse that same shell repeatedly.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="panel-vary"><span class="task-text">Vary color and icon, not structure.</span></label>
+            </div>
           </details>
 
           <details>
             <summary>Step 4 — Style it to feel like a game</summary>
-            <ul>
-              <li>Dark background</li>
-              <li>Contrast with gold / ember highlights</li>
-              <li>Border + shadow + hover glow</li>
-              <li>Consistent title font and body font</li>
-            </ul>
+            <div class="task-list">
+              <label class="task-item"><input type="checkbox" data-task="style-bg"><span class="task-text">Use a dark background.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="style-accent"><span class="task-text">Use gold or ember highlights for contrast.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="style-hover"><span class="task-text">Add border, shadow, and hover glow.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="style-fonts"><span class="task-text">Choose a consistent title font and body font.</span></label>
+            </div>
           </details>
 
           <details>
             <summary>Step 5 — Deploy it</summary>
-            <ul>
-              <li>Connect repo to Cloudflare Pages</li>
-              <li>Point subdomain like <strong>dev.theadhddojo.com</strong></li>
-              <li>Use that page as your internal workshop screen</li>
-            </ul>
+            <div class="task-list">
+              <label class="task-item"><input type="checkbox" data-task="deploy-cf"><span class="task-text">Connect the repo to Cloudflare Pages.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="deploy-subdomain"><span class="task-text">Point a subdomain such as <strong>dev.theadhddojo.com</strong>.</span></label>
+              <label class="task-item"><input type="checkbox" data-task="deploy-use"><span class="task-text">Use that page as your internal workshop screen.</span></label>
+            </div>
           </details>
         </section>
 
@@ -514,13 +643,13 @@
           <div class="kit-grid">
             <div class="kit">
               <h3>Need First</h3>
-              <ul>
-                <li>1 background</li>
-                <li>1 panel style</li>
-                <li>4 simple icons or emojis</li>
-                <li>1 title font</li>
-                <li>1 body font</li>
-              </ul>
+              <div class="task-list">
+                <label class="task-item"><input type="checkbox" data-task="asset-bg"><span class="task-text">1 background</span></label>
+                <label class="task-item"><input type="checkbox" data-task="asset-panel"><span class="task-text">1 panel style</span></label>
+                <label class="task-item"><input type="checkbox" data-task="asset-icons"><span class="task-text">4 simple icons or emojis</span></label>
+                <label class="task-item"><input type="checkbox" data-task="asset-title-font"><span class="task-text">1 title font</span></label>
+                <label class="task-item"><input type="checkbox" data-task="asset-body-font"><span class="task-text">1 body font</span></label>
+              </div>
             </div>
             <div class="kit">
               <h3>Helpful Next</h3>
@@ -563,15 +692,15 @@ assets/
           <div class="two-col">
             <div class="checklist">
               <h3>Minimum Build Checklist</h3>
-              <ul>
-                <li>Repo created</li>
-                <li>Index page created</li>
-                <li>4 panels on screen</li>
-                <li>Links working</li>
-                <li>Dark themed UI applied</li>
-                <li>Hover state added</li>
-                <li>Cloudflare deployed</li>
-              </ul>
+              <div class="task-list">
+                <label class="task-item"><input type="checkbox" data-task="check-repo"><span class="task-text">Repo created</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-index"><span class="task-text">Index page created</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-panels"><span class="task-text">4 panels on screen</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-links"><span class="task-text">Links working</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-theme"><span class="task-text">Dark themed UI applied</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-hover"><span class="task-text">Hover state added</span></label>
+                <label class="task-item"><input type="checkbox" data-task="check-live"><span class="task-text">Cloudflare deployed</span></label>
+              </div>
             </div>
 
             <div class="stoplist">
@@ -671,5 +800,102 @@ assets/
       </main>
     </div>
   </div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'dojo-devhub-construction-progress-v1';
+  const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-task]'));
+  const meterFill = document.getElementById('meterFill');
+  const completionPct = document.getElementById('completionPct');
+  const tasksDone = document.getElementById('tasksDone');
+  const tasksTotal = document.getElementById('tasksTotal');
+  const xpEarned = document.getElementById('xpEarned');
+  const currentObjective = document.getElementById('currentObjective');
+  const resetBtn = document.getElementById('resetBtn');
+  const expandAllBtn = document.getElementById('expandAllBtn');
+  const collapseAllBtn = document.getElementById('collapseAllBtn');
+  const detailsEls = Array.from(document.querySelectorAll('details'));
+
+  function loadState(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    }catch(e){
+      return {};
+    }
+  }
+
+  function saveState(state){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function applyState(){
+    const state = loadState();
+    checkboxes.forEach(cb => {
+      cb.checked = Boolean(state[cb.dataset.task]);
+    });
+  }
+
+  function getNextUnchecked(){
+    const next = checkboxes.find(cb => !cb.checked);
+    if(!next) return null;
+    const text = next.closest('.task-item')?.querySelector('.task-text')?.innerText?.trim() || 'Finish the next task.';
+    return text;
+  }
+
+  function updateTaskStyles(){
+    checkboxes.forEach(cb => {
+      const item = cb.closest('.task-item');
+      if(item){
+        item.classList.toggle('done', cb.checked);
+      }
+    });
+  }
+
+  function updateProgress(){
+    const done = checkboxes.filter(cb => cb.checked).length;
+    const total = checkboxes.length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const xp = done * 10;
+
+    tasksDone.textContent = done;
+    tasksTotal.textContent = total;
+    completionPct.textContent = pct + '%';
+    xpEarned.textContent = xp + ' XP';
+    meterFill.style.width = pct + '%';
+
+    const next = getNextUnchecked();
+    currentObjective.innerHTML = next
+      ? '<strong>' + next.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</strong>'
+      : '<strong>Quest complete.</strong> The DevHub construction checklist is fully cleared.';
+    updateTaskStyles();
+  }
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      const state = loadState();
+      state[cb.dataset.task] = cb.checked;
+      saveState(state);
+      updateProgress();
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    checkboxes.forEach(cb => cb.checked = false);
+    updateProgress();
+  });
+
+  expandAllBtn.addEventListener('click', () => {
+    detailsEls.forEach(d => d.open = true);
+  });
+
+  collapseAllBtn.addEventListener('click', () => {
+    detailsEls.forEach(d => d.open = false);
+  });
+
+  applyState();
+  updateProgress();
+})();
+</script>
 </body>
 </html>
