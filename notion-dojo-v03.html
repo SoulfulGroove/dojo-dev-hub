@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dojo Training Console v0.3</title>
+<style>
+:root{--bg:#151713;--panel:#20231d;--panel2:#29261f;--gold:#d1a451;--text:#eee8da;--muted:#aaa394;--border:#5c5343}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:900px;margin:auto;padding:20px}.top,.panel{border:1px solid var(--border);background:var(--panel);padding:18px}.top{margin-bottom:14px}.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}h1{font-family:Georgia,serif;margin:5px 0;font-size:28px}.muted{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.modes,.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:10px 12px;cursor:pointer;border-radius:6px;font-size:14px}button.active,button:hover{border-color:var(--gold)}button:focus{outline:2px solid var(--gold);outline-offset:2px}.jp{font-family:Georgia,serif;font-size:28px;margin:12px 0}.stage{margin-top:12px;padding:12px;border-left:3px solid var(--gold);background:#24221c}.hidden{display:none}.stats{display:grid;gap:8px}.stat{display:flex;justify-content:space-between;border-bottom:1px solid #39372f;padding:8px 0}.xpbar{height:9px;background:#34332c;margin-top:8px}.xpfill{height:100%;background:var(--gold);width:0%;transition:width .25s ease}.badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--muted)}.log{margin-top:12px;min-height:52px;font-size:13px;color:var(--muted)}@media(max-width:650px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="top"><div class="eyebrow">Goodrich Inc. LifeOS · External JS Experiment</div><h1>⛩ Dojo Training Console v0.3</h1><div class="muted">Real JavaScript state: modes, reveals, reps, XP, and next-pass logic.</div></section>
+<div class="grid">
+<section class="panel">
+<div class="eyebrow">Training Mode</div>
+<div class="modes" id="modes"><button data-mode="Sensei Lesson">Sensei Lesson</button><button data-mode="Training Drill" class="active">Training Drill</button><button data-mode="Free Practice">Free Practice</button><button data-mode="Sparring Practice">Sparring Practice</button></div>
+<div id="modeText" class="stage">Parse the phrase before revealing meaning.</div>
+<div class="eyebrow" style="margin-top:18px">Active Passage</div><div id="jp" class="jp">兵法の道</div><div id="source" class="badge">Earth · Preface</div>
+<div class="actions"><button id="hint">Reveal Hint</button><button id="answer">Reveal Answer</button><button id="next">Next Passage</button></div>
+<div id="hintBox" class="stage hidden"></div><div id="answerBox" class="stage hidden"></div>
+<div class="eyebrow" style="margin-top:18px">Rate Rep</div><div class="actions"><button data-rate="again">Again</button><button data-rate="hard">Hard</button><button data-rate="clean">Clean Rep</button></div>
+</section>
+<aside class="panel"><div class="eyebrow">Session State</div><div class="stats"><div class="stat"><span>Mode</span><b id="modeStat">Training Drill</b></div><div class="stat"><span>Rep</span><b id="rep">1</b></div><div class="stat"><span>Clean</span><b id="clean">0</b></div><div class="stat"><span>XP</span><b id="xp">0</b></div></div><div class="xpbar"><div id="xpfill" class="xpfill"></div></div><div id="log" class="log">Begin with one clean attempt.</div><div class="actions"><button id="reset">Reset Session</button></div></aside>
+</div>
+</div>
+<script>
+const passages=[
+{jp:'兵法の道',source:'Earth · Preface',hint:'兵法 = strategy / martial method · の = relational link · 道 = way/path.',answer:'Literal: “The Way of Strategy.” Preserve the force of 道 as a practiced Way before polishing the English.'},
+{jp:'我若年のむかしより兵法の道に心をかけ',source:'Earth · Preface',hint:'Focus on に心をかけ: the heart/mind is directed or devoted toward something.',answer:'Literal sense: “From my youth, I set my heart upon the Way of Strategy.”'},
+{jp:'三十を越えて跡をおもひ見るに',source:'Earth · Preface',hint:'跡をおもひ見る has the sense of looking back upon what has gone before.',answer:'Literal sense: “After passing thirty, when I looked back upon the past...”'}
+];
+const modeCopy={'Sensei Lesson':'Study the principle and relationship before attempting a polished translation.','Training Drill':'Parse the phrase before revealing meaning.','Free Practice':'Create your own rendering first; reveal evidence afterward.','Sparring Practice':'Commit under uncertainty, then compare against the evidence.'};
+let state={mode:'Training Drill',index:0,rep:1,clean:0,xp:0};
+const $=id=>document.getElementById(id);
+function render(){const p=passages[state.index];$('jp').textContent=p.jp;$('source').textContent=p.source;$('modeStat').textContent=state.mode;$('rep').textContent=state.rep;$('clean').textContent=state.clean;$('xp').textContent=state.xp;$('xpfill').style.width=Math.min(100,state.xp)+'%';$('modeText').textContent=modeCopy[state.mode];$('hintBox').classList.add('hidden');$('answerBox').classList.add('hidden');$('hintBox').textContent='';$('answerBox').textContent='';document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.mode));}
+document.querySelectorAll('#modes button').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;$('log').textContent='Mode changed to '+state.mode+'.';render()}));
+$('hint').addEventListener('click',()=>{const p=passages[state.index];$('hintBox').textContent=p.hint;$('hintBox').classList.remove('hidden')});
+$('answer').addEventListener('click',()=>{const p=passages[state.index];$('answerBox').textContent=p.answer;$('answerBox').classList.remove('hidden')});
+$('next').addEventListener('click',()=>{state.index=(state.index+1)%passages.length;state.rep++;$('log').textContent='Advanced to rep '+state.rep+'.';render()});
+document.querySelectorAll('[data-rate]').forEach(b=>b.addEventListener('click',()=>{const r=b.dataset.rate;if(r==='clean'){state.clean++;state.xp+=20;$('log').textContent='Clean rep. +20 XP.'}else if(r==='hard'){state.xp+=10;$('log').textContent='Hard rep. +10 XP; keep it in rotation.'}else{$('log').textContent='Marked Again; no XP, repeat deliberately.'}state.xp=Math.min(100,state.xp);render()}));
+$('reset').addEventListener('click',()=>{state={mode:'Training Drill',index:0,rep:1,clean:0,xp:0};$('log').textContent='Session reset.';render()});
+render();
+</script>
+</body>
+</html>
