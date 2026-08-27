@@ -1,71 +1,142 @@
 import streamlit as st
+from corpus_parser import parse_corpus, flatten_passages
 
 st.set_page_config(page_title="Musashi Corpus Explorer", page_icon="⚔️", layout="wide")
 
 st.title("⚔️ Musashi Corpus Explorer")
-st.caption("Foundry Experiment 002 · Streamlit Lab")
+st.caption("Koten Original · full-corpus prototype")
 
-PASSAGES = [
-    {
-        "scroll": "Earth",
-        "jp": "三十を越えて跡をおもひ見るに兵法至極して勝つにはあらず",
-        "literal": "Looking back after passing thirty, my victories were not because I had reached the ultimate of strategy.",
-        "note": "Musashi reflects on earlier victories and rejects the idea that they proved complete mastery."
-    },
-    {
-        "scroll": "Earth",
-        "jp": "おのづから道の器用ありて天理を離れざるが故か",
-        "literal": "Perhaps I naturally had an aptitude for the Way and did not depart from the principles of Heaven.",
-        "note": "A reflective explanation rather than a claim of finished understanding."
-    },
-    {
-        "scroll": "Earth",
-        "jp": "その後猶も深き道理を得んと朝鍛夕錬して見ればおのづから兵法の道にあふこと我五十歳のころなり",
-        "literal": "After that, seeking still deeper principles, training morning and evening, I naturally came to accord with the Way of strategy around the age of fifty.",
-        "note": "A strong example of sustained practice leading toward deeper structural understanding."
-    },
-]
+uploaded = st.sidebar.file_uploader("Load compiled Koten TXT", type=["txt"])
+st.sidebar.caption("Uses the numbered [####] hierarchy in the compiled source.")
 
-left, right = st.columns([1, 2])
+if uploaded is None:
+    st.info("Upload the compiled Koten-original TXT file to load the full corpus.")
+    st.stop()
 
-with left:
-    st.subheader("Search")
-    scroll = st.selectbox("Scroll", ["All", "Earth", "Water", "Fire", "Wind", "Void"])
-    term = st.text_input("Japanese term or phrase", value="道")
-    show_literal = st.toggle("Show literal reading", value=True)
-    show_notes = st.toggle("Show interpretive note", value=False)
+text = uploaded.getvalue().decode("utf-8")
+corpus = parse_corpus(text)
+rows = flatten_passages(corpus)
 
-filtered = [p for p in PASSAGES if scroll == "All" or p["scroll"] == scroll]
-if term:
-    matches = [p for p in filtered if term in p["jp"]]
-else:
-    matches = filtered
+scroll_options = ["All", "Preface", "Earth", "Water", "Fire", "Wind", "Void"]
+scroll = st.sidebar.selectbox("Scroll", scroll_options)
+term = st.sidebar.text_input("Search Japanese term or phrase", value="道")
+whole_section = st.sidebar.toggle("Show section context", value=False)
 
-occurrences = sum(p["jp"].count(term) for p in filtered) if term else 0
+scope_rows = rows if scroll == "All" else [r for r in rows if r["scroll"] == scroll]
+matches = [r for r in scope_rows if (term in r["text"] if term else True)]
+occurrences = sum(r["text"].count(term) for r in scope_rows) if term else 0
 
-with right:
-    st.subheader("Results")
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Matching passages", len(matches))
-    c2.metric("Occurrences", occurrences)
-    c3.metric("Loaded passages", len(filtered))
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Sections", sum(corpus["section_counts"].values()))
+c2.metric("Passages", len(rows))
+c3.metric("Matching passages", len(matches))
+c4.metric("Occurrences", occurrences)
 
+tab_search, tab_browse, tab_analysis, tab_source = st.tabs(
+    ["Search", "Browse", "Analysis", "Source Structure"]
+)
+
+with tab_search:
     if not matches:
-        st.info("No matching passage in this small prototype dataset yet.")
+        st.info("No matching passages in the selected scope.")
+    else:
+        for r in matches:
+            with st.container(border=True):
+                corrected = ""
+                if r["source_id"] != r["section_id"]:
+                    corrected = f" · source marker [{r['source_id']}]"
+                st.caption(f"{r['scroll']} · [{r['section_id']}] {r['heading']}{corrected}")
+                st.markdown(f"### {r['text']}")
+                st.caption(r["passage_id"])
+                if whole_section:
+                    same = [x for x in rows if x["section_id"] == r["section_id"]]
+                    with st.expander("Section context"):
+                        for x in same:
+                            st.write(x["text"])
 
-    for i, passage in enumerate(matches, start=1):
-        with st.container(border=True):
-            st.caption(f"{passage['scroll']} Scroll · Match {i}")
-            st.markdown(f"### {passage['jp']}")
-            if show_literal:
-                st.markdown(f"**Literal working reading:** {passage['literal']}")
-            if show_notes:
-                st.markdown(f"**Interpretive note:** {passage['note']}")
+with tab_browse:
+    browse_scroll = st.selectbox(
+        "Browse scroll",
+        ["Preface", "Earth", "Water", "Fire", "Wind", "Void"],
+        key="browse_scroll",
+    )
+    section_records = [
+        rec for rec in corpus["records"]
+        if rec["scroll"] == browse_scroll and rec["kind"] in {"preface", "section"}
+    ]
+    labels = {
+        f"[{rec['canonical_id']}] {rec['heading']}": rec
+        for rec in section_records
+    }
+    if labels:
+        selected = st.selectbox("Section", list(labels.keys()))
+        rec = labels[selected]
+        st.subheader(rec["heading"])
+        st.caption(
+            f"Canonical ID [{rec['canonical_id']}] · source marker [{rec['source_id']}]"
+        )
+        for p in rec["passages"]:
+            st.markdown(p["text"])
+            st.caption(p["passage_id"])
 
-st.divider()
-st.subheader("Quick term counts")
-terms = ["道", "兵法", "理", "天理", "鍛", "錬"]
-counts = {t: sum(p["jp"].count(t) for p in PASSAGES) for t in terms}
-st.bar_chart(counts)
+with tab_analysis:
+    st.subheader("Term distribution by scroll")
+    analysis_term = st.text_input("Term", value=term or "道", key="analysis_term")
+    scrolls = ["Preface", "Earth", "Water", "Fire", "Wind", "Void"]
+    counts = {
+        s: sum(r["text"].count(analysis_term) for r in rows if r["scroll"] == s)
+        for s in scrolls
+    }
+    st.bar_chart(counts)
+    st.write(counts)
 
-st.caption("Prototype only: seeded with a few Earth Scroll passages to prove the Streamlit workflow. The corpus can be expanded later without changing the basic interface.")
+    st.subheader("Quick comparison set")
+    default_terms = "道,兵法,理,拍子,心,勝"
+    term_list = [
+        t.strip() for t in st.text_input(
+            "Comma-separated terms", default_terms
+        ).split(",") if t.strip()
+    ]
+    table = []
+    for t in term_list:
+        row = {"term": t}
+        for s in scrolls[1:]:
+            row[s] = sum(r["text"].count(t) for r in rows if r["scroll"] == s)
+        table.append(row)
+    st.dataframe(table, use_container_width=True)
+
+with tab_source:
+    st.subheader("Parsed hierarchy")
+    st.write(
+        {
+            "records": corpus["record_count"],
+            "sections": corpus["section_counts"],
+            "passages": len(rows),
+        }
+    )
+    corrected = [
+        rec for rec in corpus["records"]
+        if rec["kind"] == "section" and rec["id_corrected"]
+    ]
+    if corrected:
+        st.warning(
+            "Canonical IDs differ from source markers where the compiled numbering "
+            "contains obvious sequence typos. Source markers are retained."
+        )
+        st.dataframe(
+            [
+                {
+                    "scroll": r["scroll"],
+                    "canonical": r["canonical_id"],
+                    "source": r["source_id"],
+                    "heading": r["heading"],
+                }
+                for r in corrected
+            ],
+            use_container_width=True,
+        )
+
+st.caption(
+    "Prototype scope: Koten original only. Future modern/reconstructed/translation "
+    "layers can attach to the same canonical section IDs."
+)
