@@ -1,0 +1,18 @@
+{
+  "name": "Gig Warrior Performance Forge",
+  "short_name": "Perf Forge",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0f16",
+  "theme_color": "#0b0f16",
+  "description": "Plan active-time earnings bands and track Gig Warrior performance pace.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
