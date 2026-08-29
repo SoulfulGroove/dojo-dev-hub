@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Performance Forge">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Gig Warrior Performance Forge</title>
+<style>
+:root{--bg:#0b0f16;--panel:#121824;--line:#273244;--text:#f3f4f6;--muted:#9aa4b2;--gold:#e7b955;--zero:#7d8796;--one:#a9bde2;--two:#79d2a7;--three:#f1c766;--diamond:#d7b3ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#0b0f16,#101722);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
+.app{max-width:520px;margin:auto;padding:18px 0 28px}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:800}h1{font-size:27px;line-height:1.05;margin:7px 0 5px}.sub{color:var(--muted);font-size:13px;line-height:1.4;margin-bottom:16px}.card{background:rgba(18,24,36,.96);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 12px 36px rgba(0,0,0,.24)}.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;margin:0 0 12px;color:#cbd5e1}.grid,.hero{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:var(--muted);font-size:12px;margin:0 0 6px}.field input{width:100%;font-size:22px;font-weight:750;color:var(--text);background:#0d1420;border:1px solid #2c394c;border-radius:12px;padding:12px 13px;outline:none}.field input:focus{border-color:#64748b}.bands{display:grid;gap:8px;margin-top:12px}.band{display:grid;grid-template-columns:74px 1fr auto;gap:9px;align-items:center;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#0d1420}.stars{font-weight:900}.rate{font-size:12px;color:var(--muted)}.money{font-weight:850}.one .stars{color:var(--one)}.two .stars{color:var(--two)}.three .stars{color:var(--three)}.diamond .stars{color:var(--diamond)}.metric{padding:13px;border-radius:14px;background:#0d1420;border:1px solid var(--line)}.metric .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.metric .v{font-size:24px;font-weight:850;margin-top:5px}.rating{font-size:28px!important}.barwrap{margin-top:12px}.barlabel{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:6px}.bar{height:10px;background:#0d1420;border:1px solid var(--line);border-radius:999px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#64748b,#e7b955);transition:width .2s ease}.note{color:var(--muted);font-size:12px;line-height:1.45;margin-top:10px}.footer{text-align:center;color:#657184;font-size:11px;line-height:1.4;margin-top:16px}@media(max-width:370px){.grid,.hero{grid-template-columns:1fr}.band{grid-template-columns:66px 1fr auto}}
+</style>
+</head>
+<body>
+<main class="app">
+<div class="eyebrow">Gig Warrior</div>
+<h1>Performance Forge</h1>
+<div class="sub">Plan the mission, track the pace, and judge how efficiently active time becomes cash.</div>
+<section class="card">
+<h2>Mission Planner</h2>
+<div class="field"><label for="targetHours">Target active hours</label><input id="targetHours" type="number" inputmode="decimal" min="0" step="0.25" value="8"></div>
+<div class="bands" id="bands"></div>
+</section>
+<section class="card">
+<h2>Live Performance</h2>
+<div class="grid"><div class="field"><label for="activeHours">Current active hours</label><input id="activeHours" type="number" inputmode="decimal" min="0" step="0.01" value="0"></div><div class="field"><label for="earnings">Current earnings</label><input id="earnings" type="number" inputmode="decimal" min="0" step="0.01" value="0"></div></div>
+<div class="hero" style="margin-top:12px"><div class="metric"><div class="k">Current pace</div><div class="v" id="pace">$0.00/hr</div></div><div class="metric"><div class="k">Performance</div><div class="v rating" id="rating">—</div></div><div class="metric"><div class="k">Projected finish</div><div class="v" id="projection">$0</div></div><div class="metric"><div class="k">★ Minimum</div><div class="v" id="floorTarget">$0</div></div></div>
+<div class="barwrap"><div class="barlabel"><span>Active-time progress</span><span id="timePct">0%</span></div><div class="bar"><div class="fill" id="timeFill"></div></div></div>
+<div class="barwrap"><div class="barlabel"><span>Cash progress vs ★ minimum</span><span id="cashPct">0%</span></div><div class="bar"><div class="fill" id="cashFill"></div></div></div>
+<div class="note" id="status">Enter active time and earnings to calculate your current performance pace.</div>
+</section>
+<div class="footer">0★ &lt; $16.67/hr · ★ $16.67–19.99 · ★★ $20–24.99 · ★★★ $25–29.99 · ◆ $30+/hr</div>
+</main>
+<script>
+const $=id=>document.getElementById(id),floor=16.67;
+const money=(n,d=0)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:d,maximumFractionDigits:d}).format(n||0);
+function band(rate){if(rate<16.67)return{label:'0★',cls:'zero'};if(rate<20)return{label:'★',cls:'one'};if(rate<25)return{label:'★★',cls:'two'};if(rate<30)return{label:'★★★',cls:'three'};return{label:'◆',cls:'diamond'}}
+function render(){const target=Math.max(0,+$('targetHours').value||0),active=Math.max(0,+$('activeHours').value||0),earn=Math.max(0,+$('earnings').value||0);const specs=[['★','one',16.67,20],['★★','two',20,25],['★★★','three',25,30],['◆','diamond',30,null]];$('bands').innerHTML=specs.map(([l,c,a,b])=>`<div class="band ${c}"><div class="stars">${l}</div><div class="rate">${money(a,2)}/hr${b?`–${money(b-.01,2)}/hr`:'+'}</div><div class="money">${b?`${money(target*a)}–${money(target*b)}`:`${money(target*a)}+`}</div></div>`).join('');const floorTarget=target*floor;$('floorTarget').textContent=money(floorTarget);const pace=active>0?earn/active:0,b=band(pace);$('pace').textContent=active>0?`${money(pace,2)}/hr`:'$0.00/hr';$('rating').textContent=active>0?b.label:'—';$('rating').className=`v rating ${active>0?b.cls:''}`;$('projection').textContent=active>0?money(pace*target):'$0';const tp=target>0?Math.min(100,active/target*100):0,cp=floorTarget>0?Math.min(100,earn/floorTarget*100):0;$('timePct').textContent=`${Math.round(tp)}%`;$('cashPct').textContent=`${Math.round(cp)}%`;$('timeFill').style.width=`${tp}%`;$('cashFill').style.width=`${cp}%`;if(active<=0){$('status').textContent='Enter active time and earnings to calculate your current performance pace.'}else{const remaining=Math.max(0,target-active),needed=Math.max(0,floorTarget-earn);$('status').textContent=`${b.label} pace · ${remaining.toFixed(2)} active hr remaining · ${needed>0?money(needed)+' needed to reach the ★ minimum':'★ minimum already secured at current earnings'}.`}localStorage.setItem('performanceForge',JSON.stringify({target,active,earn}))}
+['targetHours','activeHours','earnings'].forEach(id=>$(id).addEventListener('input',render));try{const s=JSON.parse(localStorage.getItem('performanceForge'));if(s){$('targetHours').value=s.target??8;$('activeHours').value=s.active??0;$('earnings').value=s.earn??0}}catch{}render();if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
