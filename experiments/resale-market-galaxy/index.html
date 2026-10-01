@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interactive resale-market opportunity map built from auction comps and category benchmarks.">
+  <title>Resale Market Galaxy</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">DOJO EXPERIMENT / RESALE MARKET INTELLIGENCE</div>
+      <h1>Resale Market Galaxy</h1>
+      <p>
+        Explore category value, reliability, demand, and evidence strength in one interactive field.
+        Click any bubble to inspect its resale profile.
+      </p>
+    </header>
+
+    <section class="toolbar" aria-label="Visualization controls">
+      <label class="control search-control">
+        <span>Search</span>
+        <input id="search" type="search" placeholder="Coins, dresser, sofa…" autocomplete="off">
+      </label>
+
+      <label class="control">
+        <span>Minimum sample <strong id="sampleValue">5</strong></span>
+        <input id="sample" type="range" min="1" max="60" value="5">
+      </label>
+
+      <label class="control">
+        <span>Labels</span>
+        <select id="labels">
+          <option value="all">All categories</option>
+          <option value="selected">Selected only</option>
+          <option value="none">Hidden</option>
+        </select>
+      </label>
+
+      <button id="reset" type="button">Reset</button>
+    </section>
+
+    <section class="workspace">
+      <div class="chart-card">
+        <div class="chart-heading">
+          <div>
+            <h2>Opportunity field</h2>
+            <p>Upper-right = higher typical value + higher probability of clearing the $10 processing threshold.</p>
+          </div>
+          <div class="legend">
+            <span><i class="dot dot-size"></i> Size = sample count</span>
+            <span><i class="ring"></i> Ring = bidding intensity</span>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <svg id="chart" viewBox="0 0 940 610" role="img" aria-labelledby="chartTitle chartDesc">
+            <title id="chartTitle">Resale opportunity galaxy</title>
+            <desc id="chartDesc">Median hammer price is plotted horizontally, percent of lots clearing ten dollars vertically, bubble size by sample count, and ring thickness by average bid count.</desc>
+          </svg>
+        </div>
+      </div>
+
+      <aside class="inspector" aria-live="polite">
+        <div class="inspector-kicker">Selected category</div>
+        <h2 id="categoryName">Choose a bubble</h2>
+        <div id="categorySummary" class="summary">Tap or click a category to inspect its resale profile.</div>
+        <div id="metrics" class="metrics"></div>
+      </aside>
+    </section>
+
+    <section class="guide">
+      <article>
+        <h3>How to read it</h3>
+        <p><strong>Right</strong> means higher median hammer price. <strong>Up</strong> means a larger share of lots clear $10. Bigger bubbles have more evidence behind them.</p>
+      </article>
+      <article>
+        <h3>Why it matters</h3>
+        <p>The map separates dependable categories from low-value processing traps and from exciting but thin-sample outliers.</p>
+      </article>
+      <article>
+        <h3>Decision lines</h3>
+        <p>The dashed references at $20 median and 70% clearing $10+ are operating guides, not statistical laws.</p>
+      </article>
+    </section>
+
+    <footer>
+      Resale Market Galaxy · Dojo experiment · Data currently embedded from the Resale Market Arbitrage benchmark set
+    </footer>
+  </main>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
