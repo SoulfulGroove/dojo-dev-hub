@@ -1,0 +1,51 @@
+source_id,title,date_scope,verification_status,url,locator,limitations
+S01,National Archives: Shoho castle-town maps,1644–1648,catalogue verified,https://www.archives.go.jp/owning/important.html,169-0335,Military plans; individual sheets require inspection
+S02,National Archives: provincial maps and village registers,multiple dates; principally later surviving holdings,catalogue verified,https://www.archives.go.jp/exhibition/digital/shogunnoarchives/contents/53.html,特083-0001; village registers 176-0281,Do not label Tenpo holdings as Shoho originals
+S03,"Richard Cocks diary, Thompson edition, volume 1",entries 1615–1619; edition 1883,edition and preface inspected,https://archive.org/stream/diaryofrichardco01cock/diaryofrichardco01cock_djvu.txt,Preface; manuscript Add. MSS. 31300–31301 as reported in edition,Abridged edition; preface is retrospective; entry-level checks remain
+S04,Iwami Ginzan UNESCO cultural landscape dossier,16th–20th century remains,official synthesis inspected,https://whc.unesco.org/en/list/1246/,Outstanding Universal Value,Date each component independently
+S05,Tsurushi Silver Mine heritage account,mid-16th–mid-17th century,official heritage account retrieved,https://www.sado-goldmine.jp/en/about/tsurushi/,Tsurushi / magistrate office sections,1603 administrative transfer; individual labor records not inspected
+S06,"Taiji organized whaling chronology, MAFF",1606; comparison 1675,official synthesis retrieved,https://www.maff.go.jp/e/policies/market/k_ryouri/search_menu/1757/index.html,History/origin,Retrospective; do not import 1675 fleet organization
+S07,Dejima institutional history,1634–1641,official site chronology retrieved,https://nagasakidejima.jp/english/history/,Chronology and construction account,25 merchant investors; completed 1636
+S08,"Dejima Dutch Trading Post, MLIT",1614–1641,official synthesis retrieved,https://www.mlit.go.jp/tagengo-db/common/001564006.pdf,Dejima Dutch Trading Post,Political and merchant finance context
+S09,"Herman Ooms, Tokugawa Village Practice",1996 study; selected 1629–1643 records,open scholarly text/catalogue inspected,https://publishing.cdlib.org/ucpressebooks/public/book/tokugawa-village-practice-class-status-power-law.html,Chapter 3; Appendix 2 pp.353–355,Later cases dominate; use record-specific dates
+S10,Funaki Scenes in and around Kyoto,circa 1615,museum catalogue retrieved,https://emuseum.nich.go.jp/detail?langId=en&webView=&content_base_id=100318&content_part_id=0&content_pict_id=0,Tokyo National Museum A-11168,"Attributed to Iwasa Matabei; pictorial selection, not census"
+S11,"Tokaido, Japan Search / NDL",1601 onward; broad Edo overview,official synthesis retrieved,https://jpsearch.go.jp/en/gallery/ndl-r9DWpmJlrdUlvW,Tokaido overview,Individual stations/crossing rules need dated checks
+S12,"Tokaido historical chronology, Nippon.com",1601;1619;1624,secondary synthesis retrieved,https://www.nippon.com/en/articles/-/16345,Road formation,Shono 1624; Osaka extension 1619
+S13,"Development of Japanese Forestry, UBC Press chapter",17th century;1665 comparison,scholarly excerpt retrieved,https://www.ubcpress.ca/asset/12526/1/9780774808828.pdf,Chapter 1 pp.4–5,Kiso conservation reform 1665 is outside scope
+S14,"Forest flickers of history, Oxford chapter",2024 synthesis of early modern evidence,scholarly excerpt retrieved,https://academic.oup.com/book/58200/chapter/481598204,Early modern Japan section,Broad 17th-century dating is not proof by 1645
+S15,"Obamas Ocean and Fish, MLIT",broad historical overview,official synthesis retrieved,https://www.mlit.go.jp/tagengo-db/common/001561719.pdf,Transport and marine ecology,"Two-day estimate is broadly Edo, not securely 1600"
+S16,Matsumae and Ainu trade scholarship,early modern,scholarly catalogue/excerpt retrieved,https://www.jstor.org/stable/40316475,Long-Distance Trade Networks and Shipping in the Ezo Region,Do not project later contract fisheries backward
+S17,Ainu Identity and the Early Modern State,2005 scholarship,scholarly abstract retrieved,https://academic.oup.com/california-scholarship-online/book/20490/chapter/179679476,Geographies of Identity chapter,"Ritual, trade and status; local chronology needs extraction"
+S18,"Shuri Castle political overview, Tokyo government",1609 onward,public institutional synthesis retrieved,https://edolegacytravel.metro.tokyo.lg.jp/spots/shuri-castle/,Historical overview,Ryukyu retained court and China trade under Satsuma domination
+S19,Naha City Museum: Shuri and Naha,Ryukyu Kingdom period,municipal museum overview retrieved,https://www.rekishi-archive.city.naha.okinawa.jp/en/history,Shuri/Naha,Royal/port distinction; not local household evidence
+S20,1605 tsunami earthquake analysis,2013 research on 1605,scholarly excerpt retrieved,https://academic.oup.com/gji/article/195/2/1088/642899,"GJI 195(2),1088",Differentiate Kyoto report date from tsunami date
+S21,1596 sequential rupture study,2019 research on 1596,scholarly excerpt retrieved,https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JB017264,2018JB017264,Historical and geological reconstruction
+S22,"17th-century tsunami deposits, Zisin volume 76",1611;1640;later comparisons,journal abstracts retrieved,https://www.jstage.jst.go.jp/browse/zisin/76/0/_contents/-char/en,17th-century tsunami studies,Do not collapse all deposits into 1611
+S23,Kutsuki family documents,medieval into early modern; item dates needed,archive catalogue verified,https://www.archives.go.jp/owning/important.html,特073-0001,Date-filter documents before using
+S24,Temple branch registers,1632–1633,archive catalogue verified,https://www.archives.go.jp/owning/important.html,特032-0001,Excludes Tendai and Jodo Shinshu according to catalogue
+S25,Yonezawa Shoho castle-town plan,commission from 1644,archive search result retrieved,https://www.archives.go.jp/owning/mini_img/1-6.html,Dewa Yonezawa castle plan,Image not inspected
+S26,Seiryo-ki agricultural report,1620s–1630s,scholarly source identification retrieved,https://d-arch.ide.go.jp/je_archive/society/wp_je_unu41.html,"Volume 7, Shinmin Kangetsu-shu",Text not inspected; Soan Matsuura attribution in account
+P01,Tokitsune-kyoki,late 16th–early 17th century,user-supplied lead; not verified,,edition and dated entry unresolved,Kyoto and Yamashina diary research
+P02,Tamonin Nikki,period subset 1580 onward,user-supplied lead; not verified,,edition and dated entry unresolved,Nara; agricultural/weather entries to locate
+P03,Ietada Nikki,late 16th century,user-supplied lead; not verified,,edition unresolved,Military travel and administration
+P04,Uwai Kakuken Nikki,late 16th century,user-supplied lead; not verified,,edition unresolved,Southern Kyushu
+P05,Umetsu Masakage Nikki,early 17th century,user-supplied lead; not verified,,edition unresolved,Dewa/Akita administration
+P06,Matsuya family tea diaries,16th–17th century subsets,user-supplied lead; not verified,,edition unresolved,Nara exchange and material culture
+P07,Tsuda Sogyu / Tennojiya records,16th century subsets,user-supplied lead; not verified,,edition unresolved,Sakai mercantile/tea circles
+P08,Kamiya Sotan Nikki,16th–17th century subsets,user-supplied lead; not verified,,edition unresolved,Hakata commercial connections
+P09,"Miura Joshin, Keicho Kenmonshu",early 17th century,user-supplied lead; not verified,,edition unresolved,Genre and eyewitness status require checking
+P10,Musashi securely attributed writings,principally 1640s,user-supplied lead; not verified,,manuscript transmission unresolved,Not a proxy for ordinary village life
+P11,"Joao Rodrigues, Arte da Lingoa de Iapam",early 17th century,user-supplied lead; not verified,,edition unresolved,Language evidence not national occupational census
+P12,Joao Rodrigues cultural history,early 17th century,user-supplied lead; not verified,,edition unresolved,Compare translation and manuscript
+P13,"Luis Frois, Historia de Japam",late 16th century,user-supplied lead; not verified,,edition unresolved,Missionary/Jesuit perspective
+P14,Luis Frois cultural comparison,late 16th century,user-supplied lead; not verified,,edition unresolved,Rhetorical comparisons need contextualization
+P15,William Adams correspondence,early 17th century,partly identified through Cocks edition,,Cocks preface and appended correspondence,Individual letters need checking
+P16,John Saris voyage journal,1613,identified through Cocks edition,,Purchas references in Thompson preface,Use independent edition for final quotations
+P17,Francesco Carletti travel account,late 16th-century visit,user-supplied lead; not verified,,edition unresolved,Nagasaki observations
+P18,VOC Japan factory diaries,17th-century period subsets,user-supplied lead; not verified,,archive series and entries unresolved,Separate Hirado and Dejima phases
+P19,VOC Japan correspondence,17th-century period subsets,user-supplied lead; not verified,,archive series unresolved,Commercial accounting and cargoes
+P20,English East India Company Japan records,1613–1623 vicinity,identified through Cocks edition,,India Office series references require modern catalogue concordance,Do not adopt 1883 obsolete shelfmarks uncritically
+P21,Local village land surveys,1580–1650 subset,collection category; not an identified document,,village/volume/page unresolved,Taxable capacity is not observed harvest
+P22,Local fisheries-rights documents,1580–1650 subset,collection category; not an identified document,,community/archive unresolved,Priority gap for fishing studies
+P23,Local mining accounts,1580–1650 subset,collection category; not an identified document,,archive unresolved,Wages and food procurement gap
+P24,Merchant correspondence,1580–1650 subset,collection category; not an identified document,,archive unresolved,Credit and freight-cost gap
