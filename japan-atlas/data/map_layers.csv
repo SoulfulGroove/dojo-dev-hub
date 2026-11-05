@@ -1,0 +1,9 @@
+layer_id,name,validation_rule
+1,Terrain and historical water geometry,dated georeferenced source; modern terrain separate
+2,Provinces and political jurisdiction,province polygons distinct from dated rights/territories
+3,Settlements,named points only after verification; extent may be unknown
+4,Production and resources,activity with independently bounded date interval
+5,Transport,documented edge; no straight line presented as exact route
+6,Markets and administrative centers,market function separate from political status
+7,Hazards and events,observed damage polygon separate from inferred source zone
+8,People and institutions,"witness position, genre and reporting chain required"
