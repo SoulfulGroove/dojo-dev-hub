@@ -1,0 +1,7 @@
+chain_id,commodity,origin_or_nodes,process,source_ids,status,limitations
+C01,Silver,Iwami Ginzan,Mining → smelting/refining → port route → Tomogaura/Okidomari/Yunotsu → overseas markets,S04,B: system documented; dates/ports phase-specific,Do not infer all exports took one route or export raw ore universally
+C02,Mine supplies,Sawane → Tsurushi,Port landing → inland carriage → mining settlement,S05,B: supply-port relationship documented,"Individual food/fuel cargoes, prices and carriers not recovered"
+C03,Imported textiles and pepper/metals,English factory at Hirado,Overseas procurement → Hirado factory → agents in Edo/Osaka and other towns → buyers,S03,B: edition preface summarizes documents,"Transaction-level cargo origin, buyer, dates need journal verification"
+C04,Preserved fish,Wakasa / Obama → Kyoto,Catch → salting → road carriers/pack animals → Kyoto markets,S15,C: broadly Edo; exact 1580–1650 chain not verified,Do not reuse 18th-century catches or modern sushi routines
+C05,Construction timber,Kiso / other forest districts → cities,Felling → extraction → water/land transport → timber markets → construction,S13;S14,C: regional scholarly reconstruction,Exact origin-destination edges before 1650 unresolved
+C06,Whale products,Taiji,Whale watch → harpoon boats → landing/processing → consumers,S06,C: 1606 hunting organization only; downstream unverified,"Markets, ownership, preservation and household roles unknown"
